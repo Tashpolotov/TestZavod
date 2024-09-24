@@ -1,9 +1,15 @@
-package kg.geekstudio.core_utils.network.module
+package com.example.testzavod.utils.network.module
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.example.testzavod.data.remote.RegisterApiService
+import com.example.testzavod.domain.model.token.RefreshToken
+import com.example.testzavod.utils.Constants.TOKEN_REFRESH_FAILED_ACTION
+import com.example.testzavod.utils.SharedPref
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +22,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -31,7 +38,9 @@ object NetworkModule {
     @Provides
     fun provideHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        sharedPref: SharedPref,
+        apiServiceProvider: Provider<RegisterApiService>
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .writeTimeout(10, TimeUnit.SECONDS)
@@ -39,29 +48,59 @@ object NetworkModule {
             .connectTimeout(10, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .addInterceptor { chain ->
-                var request = chain.request()
-                var response: Response? = null
-                var isConnected = false
-                var tryCount = 0
+                val originalRequest = chain.request()
 
-                while (!isConnected) {
-                    try {
-                        response = chain.proceed(request)
-                        isConnected = true
-                    } catch (e: IOException) {
-                        if (!isNetworkAvailable(context)) {
-                            tryCount++
-                            Log.d("NetworkModule", "Attempt $tryCount: Retrying connection...")
-                        } else {
-                            throw e
-                        }
+                val accessToken = sharedPref.accessToken
+                val requestWithToken = if (!accessToken.isNullOrEmpty()) {
+                    originalRequest.newBuilder()
+                        .header("Authorization", "Bearer $accessToken")
+                        .build()
+                } else {
+                    originalRequest
+                }
+
+                var response: Response = chain.proceed(requestWithToken)
+
+                if (response.code == 401) {
+                    val newAccessToken = refreshAccessToken(apiServiceProvider, sharedPref)
+                    if (newAccessToken != null) {
+                        val newRequest = originalRequest.newBuilder()
+                            .header("Authorization", "Bearer $newAccessToken")
+                            .build()
+                        response.close()
+                        response = chain.proceed(newRequest)
+                    } else {
+                        // Отправляем сообщение, если обновление токена не удалось
+                        LocalBroadcastManager.getInstance(context)
+                            .sendBroadcast(Intent(TOKEN_REFRESH_FAILED_ACTION))
                     }
                 }
 
-                response ?: throw IOException("Failed to connect to server")
+                response
             }
             .build()
     }
+
+
+    private fun refreshAccessToken(apiServiceProvider: Provider<RegisterApiService>, sharedPref: SharedPref): String? {
+        val apiService = apiServiceProvider.get()
+        val refreshToken = sharedPref.refreshToken
+        return if (refreshToken != null) {
+            val refreshResponse = apiService.sendRefreshToken(RefreshToken(
+                refreshToken = refreshToken
+            )).execute()
+            if (refreshResponse.isSuccessful) {
+                val newAccessToken = refreshResponse.body()?.accessToken
+                sharedPref.accessToken = newAccessToken
+                newAccessToken
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+    }
+
 
     @Singleton
     @Provides
@@ -83,4 +122,5 @@ object NetworkModule {
         return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
 
     }
+
 }
