@@ -83,20 +83,4 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
-    private val tokenRefreshFailedReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == Constants.TOKEN_REFRESH_FAILED_ACTION) {
-                navController.navigate(R.id.authFragment)
-            }
-        }
-    }
-    override fun onResume() {
-        super.onResume()
-        registerReceiver(tokenRefreshFailedReceiver, IntentFilter(Constants.TOKEN_REFRESH_FAILED_ACTION))
-    }
-
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(tokenRefreshFailedReceiver)
-    }
 }

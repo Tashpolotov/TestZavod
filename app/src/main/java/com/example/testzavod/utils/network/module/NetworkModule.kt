@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.testzavod.data.remote.RegisterApiService
 import com.example.testzavod.domain.model.token.RefreshToken
@@ -69,10 +71,6 @@ object NetworkModule {
                             .build()
                         response.close()
                         response = chain.proceed(newRequest)
-                    } else {
-                        // Отправляем сообщение, если обновление токена не удалось
-                        LocalBroadcastManager.getInstance(context)
-                            .sendBroadcast(Intent(TOKEN_REFRESH_FAILED_ACTION))
                     }
                 }
 
@@ -112,6 +110,7 @@ object NetworkModule {
             .build()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false

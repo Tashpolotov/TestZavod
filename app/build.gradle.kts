@@ -7,11 +7,11 @@ plugins {
 
 android {
     namespace = "com.example.testzavod"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.testzavod"
-        minSdk = 26
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -76,8 +76,6 @@ dependencies {
     implementation(libs.com.squareup.retrofit2.retrofit)
     implementation (libs.com.squareup.retrofit2.converter.gson)
     implementation("javax.inject:javax.inject:1")
-    implementation("androidx.paging:paging-common-ktx:3.2.1")
-    implementation("androidx.paging:paging-runtime:3.2.1")
     implementation(libs.viewbindingdelegate)
 
     implementation ("androidx.camera:camera-core:1.1.0")
