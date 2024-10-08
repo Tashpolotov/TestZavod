@@ -34,7 +34,16 @@
         <item name="hintTextColor">@color/black</item>
     </style>
 
+    <style name="MyRatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@android:color/holo_green_light</item>
+        <item name="colorControlActivated">@android:color/holo_orange_dark</item>
+    </style>
 
+
+    <style name="CustomRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:minHeight">32dip</item>
+        <item name="android:maxHeight">32dip</item>
+    </style>
 
 
 </resources>

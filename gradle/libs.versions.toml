@@ -34,6 +34,7 @@ navigationFragmentKtxVersion = "2.8.1"
 firebaseCrashlyticsBuildtools = "3.0.2"
 navigationUiKtxVersion = "2.8.1"
 dokka = "0.9.18"
+documentationCommonFooterMessage = "Dokka MultiModule example."
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

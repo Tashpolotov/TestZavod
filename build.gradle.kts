@@ -5,6 +5,7 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.46.1" apply false
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
     alias(libs.plugins.jetBrains.dokka)
+
 }
 
 buildscript {
