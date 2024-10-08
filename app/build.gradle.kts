@@ -42,21 +42,14 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.bundles.uiLibs)
+
     implementation(libs.navigation.fragment.ktx)
-    implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    //hilt
-    implementation(libs.com.google.dagger.hilt.android)
-    kapt(libs.com.google.dagger.hilt.compiler)
+
     implementation(libs.glide)
     // Coroutines
     implementation(libs.coroutines)
@@ -65,16 +58,14 @@ dependencies {
     implementation(libs.com.google.dagger.hilt.android)
     kapt(libs.com.google.dagger.hilt.compiler)
 
-
     implementation (libs.coroutines)
 
     //okkhtp
-    implementation (libs.com.squareup.okhttp3.logging.interceptor)
-    implementation (libs.com.squareup.okhttp3.okhttp)
+    implementation (libs.bundles.okHtpp3)
 
     //retrofit
-    implementation(libs.com.squareup.retrofit2.retrofit)
-    implementation (libs.com.squareup.retrofit2.converter.gson)
+    implementation(libs.bundles.retrofit)
+
     implementation("javax.inject:javax.inject:1")
     implementation(libs.viewbindingdelegate)
 
