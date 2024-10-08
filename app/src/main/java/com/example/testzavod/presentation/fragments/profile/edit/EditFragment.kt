@@ -78,7 +78,7 @@ class EditFragment : BaseFragment(R.layout.fragment_edit) {
             state = {
                 binding.progressBar.isVisible = true
             },
-            onSuccess = {
+            success = {
                 binding.progressBar.isVisible = false
             },
         )

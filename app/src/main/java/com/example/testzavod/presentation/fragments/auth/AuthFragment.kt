@@ -35,7 +35,7 @@ class AuthFragment : BaseFragment(R.layout.fragment_auth) {
 
             when (binding.btnAuth.text) {
                 getString(R.string.auth) -> {
-                    binding.progressBar.isVisible = true
+                    showLoading()
                     if (phoneNumber.isNotBlank()) {
                         viewModel.sendAuth(AuthPhone(phone = phoneNumber))
                     } else {
@@ -43,7 +43,7 @@ class AuthFragment : BaseFragment(R.layout.fragment_auth) {
                     }
                 }
                 getString(R.string.send_code) -> {
-                    binding.progressBar.isVisible = true
+                    showLoading()
                     if (code.isNotBlank()) {
                         viewModel.sendCode(AuthCode(phone = phoneNumber, code = code))
                     } else {
@@ -58,7 +58,8 @@ class AuthFragment : BaseFragment(R.layout.fragment_auth) {
         viewModel.code.collectUIState(
             state = {
             },
-            onSuccess = {
+            success = {
+                hideLoading()
                 binding.progressBar.isVisible = false
                 findNavController().navigate(R.id.action_authFragment_to_mainFragment)
             }
@@ -68,11 +69,13 @@ class AuthFragment : BaseFragment(R.layout.fragment_auth) {
             state = {
                 // можно добавить загрузку
             },
-            onSuccess = {
+            success = {
                 if (it.is_success) {
+                    hideLoading()
                     binding.progressBar.isVisible = false
                     binding.inputEtSmsCode.visibility = View.VISIBLE
                     binding.btnAuth.text = getString(R.string.send_code)
+                    isHidden
                 } else {
                     context?.showToast("Неверный телефон")
                 }

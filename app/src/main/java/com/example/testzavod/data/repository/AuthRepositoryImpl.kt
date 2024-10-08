@@ -4,12 +4,9 @@ import com.example.testzavod.data.mapper.toRegisterAnswerData
 import com.example.testzavod.data.remote.AuthApiService
 import com.example.testzavod.domain.model.auth.AuthCode
 import com.example.testzavod.domain.model.auth.AuthPhone
-import com.example.testzavod.domain.model.register.RegisterAnswer
 import com.example.testzavod.domain.repository.AuthRepository
-import com.example.testzavod.utils.Resource
 import com.example.testzavod.utils.SharedPref
-import kg.geekstudio.core_utils.base.BaseRepository
-import kotlinx.coroutines.flow.Flow
+import com.example.testzavod.utils.base.BaseRepository
 
 class AuthRepositoryImpl(
     private val apiService: AuthApiService,

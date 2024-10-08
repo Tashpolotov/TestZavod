@@ -70,7 +70,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUseCase(repository: Repository):UseCase{
+    fun provideUseCase(repository: Repository): UseCase {
         return UseCase(
             authUseCase = AuthUseCase(repository.authRepository),
             registerUseCase = RegisterUseCase(repository.registerRepository),

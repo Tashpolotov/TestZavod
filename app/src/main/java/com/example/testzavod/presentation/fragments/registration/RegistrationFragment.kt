@@ -24,7 +24,7 @@ class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
     private val viewModel by viewModels<RegistrationViewModel>()
 
     override fun initialize() {
-        binding.btnRegister.isEnabled = false // Блокируем кнопку изначально
+        binding.btnRegister.isEnabled = false
 
         binding.etNumber.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && !binding.etNumber.text.toString().startsWith("+")) {
@@ -52,7 +52,7 @@ class RegistrationFragment : BaseFragment(R.layout.fragment_registration) {
                 state = {
                     binding.progressBar.isVisible = true
                 },
-                onSuccess = {
+                success = {
                     binding.progressBar.isVisible = false
                     findNavController().navigate(R.id.action_registrationFragment_to_mainFragment)
                 }

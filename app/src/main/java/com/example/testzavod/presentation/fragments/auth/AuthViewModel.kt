@@ -6,11 +6,9 @@ import com.example.testzavod.domain.model.auth.AuthCode
 import com.example.testzavod.domain.model.auth.AuthPhone
 import com.example.testzavod.domain.model.register.RegisterAnswer
 import com.example.testzavod.domain.usecase.AuthUseCase
-import com.example.testzavod.utils.Resource
-import com.example.testzavod.utils.base.BaseFragment
-import dagger.hilt.android.HiltAndroidApp
+import com.example.testzavod.presentation.state.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kg.geekstudio.core_utils.base.BaseViewModel
+import com.example.testzavod.utils.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -19,12 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val useCase : AuthUseCase
-):BaseViewModel(){
+): BaseViewModel(){
 
-    private val _auth = MutableStateFlow<Resource<AnswerAuthPhone>>(Resource.Empty())
+    private val _auth = MutableStateFlow<UIState<AnswerAuthPhone>>(UIState.Idle())
     val auth = _auth.asStateFlow()
 
-    private val _code = MutableStateFlow<Resource<RegisterAnswer>>(Resource.Empty())
+    private val _code = MutableStateFlow<UIState<RegisterAnswer>>(UIState.Idle())
     val code = _code.asStateFlow()
 
     fun sendAuth(phone:AuthPhone){

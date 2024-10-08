@@ -61,10 +61,10 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 
         viewModel.profile.collectUIState(
             state = {
-                binding.progressBar.isVisible = true
+                showLoading()
             },
-            onSuccess = {
-                binding.progressBar.isVisible = false
+            success = {
+                hideLoading()
                 binding.tvUserName.text = "Имя: ${it.profileData.name}"
                 binding.tvUserSurname.text = "Фамилия: ${it.profileData.username}"
                 binding.tvnumber.text = "Номер телефона: ${it.profileData.phone}"
